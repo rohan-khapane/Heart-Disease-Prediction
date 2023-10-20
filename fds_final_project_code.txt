@@ -1,0 +1,169 @@
+library(ggplot2)
+library(dplyr)
+library(caret)
+library(caTools)
+#---Import data---------------------------------------------------------------------------------------------------------
+getwd()
+setwd('D:/PG_SEM_1/Foundation of Data Science/PROJECT')
+cvd<-read.csv('D:\\PG_SEM_1\\Foundation of Data Science\\PROJECT\\CVD_cleaned.csv',header=TRUE,stringsAsFactors=FALSE)
+cvd
+#---Head and Tail---------------------------------------------------------------------------------------------------------
+head(cvd)#show first 5 rows of the dataset
+tail(cvd)#show last 5 rows of the dataset
+#---Shape and columns name of columns---------------------------------------------------------------------------------------------------------
+names(cvd) #displays the names of all the column present in the dataset
+dim(cvd)#show the dimensions(no. of rows and no. of columns) of the dataset
+#---Identify categorical values---------------------------------------------------------------------------------------------------------
+#using the table to identify the variables in the dataset
+lapply(cvd,table)
+#---Summary of Dataset---------------------------------------------------------------------------------------------------------
+summary(cvd)#show the summary of all columns of dataset
+#---Class and Type of data in dataset---------------------------------------------------------------------------------------------------------
+sapply(cvd,class) #show the class of all column of data set in a simple format
+lapply(cvd,class)
+lapply(cvd,typeof)
+lapply(cvd,mean) #gives the mean of all column of data set in a list format
+#----Check NA in dataset--------------------------------------------------------------------------------------------------------
+colSums(is.na(cvd)) #give all the null values present in the column seperatly
+#---Boxplot---------------------------------------------------------------------------------------------------------
+boxplot(cvd$Height_.cm.,horizontal = FALSE)
+boxplot(cvd$Weight_.kg.,horizontal=FALSE)
+boxplot(cvd$BMI,horizontal = FALSE)
+boxplot(cvd$Alcohol_Consumption,horizontal = FALSE)
+boxplot(cvd$Fruit_Consumption,horizontal=FALSE)
+boxplot(cvd$Green_Vegetables_Consumption,horizontal = FALSE)
+boxplot(cvd$FriedPotato_Consumption,horizontal=FALSE)
+#---Bivariate Analysis---------------------------------------------------------------------------------------------------------
+#Bivariate Analysis
+ggplot(cvd,aes(x=Age_Category,fill=Sex))+
+  geom_bar(position='dodge')+
+  geom_text(stat='count',aes(label=after_stat(count)),position=position_dodge(0.90),size=3,vjust=-1)+
+  ggtitle('bar of Age')
+ggplot(cvd,aes(x=Heart_Disease,fill=Sex))+
+  geom_bar(position='dodge')+
+  geom_text(stat='count',aes(label=after_stat(count)),position=position_dodge(0.90),size=3,vjust=-1,)+
+  ggtitle('Bar Graph of Heart Disese')
+ggplot(cvd,aes(x=General_Health,fill=Heart_Disease))+
+  geom_bar(position='dodge')+
+  geom_text(stat='count',aes(label=after_stat(count)),position=position_dodge(0.90),size=3,vjust=-1)+
+  ggtitle('Bargraph of General_Health v/s Heart_Disease')
+ggplot(cvd,aes(x=Checkup,fill=Heart_Disease))+
+  geom_bar(position='dodge')+
+  geom_text(stat='count',aes(label=after_stat(count)),position=position_dodge(0.90),size=3,vjust=-1)+
+  ggtitle('Bargraph of Checkup v/s Heart_Disease')
+ggplot(cvd,aes(x=Exercise,fill=Heart_Disease))+
+  geom_bar(position='dodge')+
+  geom_text(stat='count',aes(label=after_stat(count)),position=position_dodge(0.90),size=3,vjust=-1)+
+  ggtitle('Bargraph of Exercise v/s Heart_Disease')
+ggplot(cvd,aes(x=Skin_Cancer,fill=Heart_Disease))+
+  geom_bar(position='dodge')+
+  geom_text(stat='count',aes(label=after_stat(count)),position=position_dodge(0.90),size=3,vjust=-1)+
+  ggtitle('Bargraph of Skin_Cancer v/s Heart_Disease')
+ggplot(cvd,aes(x=Other_Cancer,fill=Heart_Disease))+
+  geom_bar(position='dodge')+
+  geom_text(stat='count',aes(label=after_stat(count)),position=position_dodge(0.90),size=3,vjust=-1)+
+  ggtitle('Bargraph of Other_Cancer v/s Heart_Disease')
+ggplot(cvd,aes(x=Depression,fill=Heart_Disease))+
+  geom_bar(position='dodge')+
+  geom_text(stat='count',aes(label=after_stat(count)),position=position_dodge(0.90),size=3,vjust=-1)+
+  ggtitle('Bargraph of Depression v/s Heart_Disease')
+ggplot(cvd,aes(x=Arthritis,fill=Heart_Disease))+
+  geom_bar(position='dodge')+
+  geom_text(stat='count',aes(label=after_stat(count)),position=position_dodge(0.90),size=3,vjust=-1)+
+  ggtitle('Bargraph of Arthritis v/s Heart_Disease')
+ggplot(cvd,aes(x=Sex,fill=Heart_Disease))+
+  geom_bar(position='dodge')+
+  geom_text(stat='count',aes(label=after_stat(count)),position=position_dodge(0.90),size=3,vjust=-1)+
+  ggtitle('Bargraph of Sex v/s Heart_Disease')
+ggplot(cvd,aes(x=Age_Category,fill=Heart_Disease))+
+  geom_bar(position='dodge')+
+  geom_text(stat='count',aes(label=after_stat(count)),position=position_dodge(0.90),size=3,vjust=-1)+
+  ggtitle('Bargraph of Age_Category v/s Heart_Disease')
+ggplot(cvd,aes(x=Smoking_History,fill=Heart_Disease))+
+  geom_bar(position='dodge')+
+  geom_text(stat='count',aes(label=after_stat(count)),position=position_dodge(0.90),size=3,vjust=-1)+
+  ggtitle('Bargraph of Smoking_History v/s Heart_Disease')
+ggplot(cvd,aes(x=Alcohol_Consumption,fill=Heart_Disease))+
+  geom_bar(position='dodge')+
+  geom_text(stat='count',aes(label=after_stat(count)),position=position_dodge(0.90),size=3,vjust=-1)+
+  ggtitle('Bargraph of Alcohol_Consumption v/s Heart_Disease')
+ggplot(cvd,aes(x=BMI,fill=Heart_Disease))+
+  geom_bar(position='dodge')+
+  geom_text(stat='count',aes(label=after_stat(count)),position=position_dodge(0.90),size=3,vjust=-1)+
+  ggtitle('Bargraph of BMI v/s Heart_Disease')
+ggplot(cvd,aes(x=Fruit_Consumption,fill=Heart_Disease))+
+  geom_bar(position='dodge')+
+  geom_text(stat='count',aes(label=after_stat(count)),position=position_dodge(0.90),size=3,vjust=-1)+
+  ggtitle('Bargraph of Fruit_Consumption v/s Heart_Disease')
+ggplot(cvd,aes(x=Green_Vegetables_Consumption,fill=Heart_Disease))+
+  geom_bar(position='dodge')+
+  geom_text(stat='count',aes(label=after_stat(count)),position=position_dodge(0.90),size=3,vjust=-1)+
+  ggtitle('Bargraph of Green_Vegetables v/s Heart_Disease')
+ggplot(cvd,aes(x=FriedPotato_Consumption,fill=Heart_Disease))+
+  geom_bar(position='dodge')+
+  geom_text(stat='count',aes(label=after_stat(count)),position=position_dodge(0.90),size=3,vjust=-1)+
+  ggtitle('Bargraph of FriedPotato_Consumption v/s Heart_Disease')
+
+#---Model building---------------------------------------------------------------------------------------------------------
+#Model
+a_cvd<-cvd #copied tha dataset into a_cvd
+dim(a_cvd)
+# converted the Heart_Diseasee (target)variable in to 0 and 1
+a_cvd['Heart_Disease']<-as.numeric(as.factor(a_cvd$Heart_Disease))-1
+## for logistic regression the target varible needs to in 0 or 1 format
+#table(a_cvd['Heart_Disease'])
+set.seed(123) #for generating same set of data in train & test data
+split<-sample.split(a_cvd$Heart_Disease,SplitRatio = 0.80) # spliting the data in 80:20 ratio in train and test data
+#why a_cvd$Heart_Disease ,as hear_disease is the target variable
+table(split)
+train_d<-a_cvd[split,] #making train data for modeling containing 80% data
+test_d<-a_cvd[!split,] #making test data for model building containing 20% data
+#dim(train1_d)
+#dim(test1_d)
+##Logistic Regression Model As the target variable is categorical (Yes or NO) format
+#glm(target_variable~independent_variables,data=datasetname,family=binomial(link="logit"))as target variable is Yes or No
+lrm_model<-glm(Heart_Disease~.,data=train_d,family = binomial(link = "logit"))
+summary(lrm_model) #gives the summary of the model
+#The model is trained using Training data
+#Procedure for testing Model
+##IN testingdata all the independent variables required to predict the model are been taken from the testing dataset
+##except target varible as needs to be predicted by the model
+testingdata<-test_d[,!names(test_d) %in% "Heart_Disease"]
+lapply(testingdata,table)
+dim(testingdata)
+pred<-predict(lrm_model,newdata =testingdata ,type = "response")#predicting the output of the testingdata using trained lrm_model
+#pred
+predicted_labels <- ifelse(pred >= 0.5, 1, 0)#taking a threshold of 0.5 if predicted value>= 0.5 asign value as 1 or else asing value as 0
+table(predicted_labels)
+#As the model as tested the test data and predicted its output we need to cross-verify the predicted output with actual output
+#we take only the target variable from the testing data for cross-verification
+test1_d<-as.numeric(test_d$Heart_Disease) #the data is converted as numeric because during accuracy prediction it was giving error
+dim(test1_d)
+table(test1_d)
+#---Model Evaluation---------------------------------------------------------------------------------------------------------
+
+
+#Model Evaluation
+accuracy <- sum(predicted_labels == test1_d) / length(test1_d)
+#Print accuracy
+cat("Accuracy:", accuracy, "\n")
+#confusion Matrix
+pred1 <- as.factor(predicted_labels)
+test1_d1 <- as.factor(test1_d)
+conf_matrix <- confusionMatrix(pred1,test1_d1)
+cat("Confusion Matrix:\n")
+print(conf_matrix)
+table(test1_d)
+#Visualization of model
+plot(roc_obj,main="Roc Curve")
+mse <- mean((test1_d - pred)^2)
+rmse <- sqrt(mse)
+mae <- mean(abs(test1_d - pred))
+r_squared <- 1 - (sum((test1_d - pred)^2) / sum((test1_d - mean(test1_d))^2))
+cat("Mean Squared Error (MSE): ", mse, "\n")
+cat("Root Mean Squared Error (RMSE): ", rmse, "\n")
+cat("Mean Absolute Error (MAE): ", mae, "\n")
+cat("R-squared (R²): ", r_squared, "\n")
+#Visualization of model
+plot(roc_obj,main="Roc Curve")
+
